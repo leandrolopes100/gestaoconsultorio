@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Pacientes — Nutri Clínica{% endblock %}
+
+{% block page_title %}
+Pacientes
+{% endblock %}
+
+{% block page_subtitle %}
+Gerencie seus pacientes, veja dados principais e acesse ações rápidas.
+{% endblock %}
+
+{% block content %}
+  <!-- Barra de ações / busca -->
+  <div class="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between mb-4">
+    <form method="get" class="flex items-center gap-2">
+      <label for="q" class="sr-only">Buscar paciente</label>
+      <input id="q" name="q" value="{{ request.GET.q|default:'' }}" type="text" placeholder="Buscar por nome, CPF, e-mail..." class="w-72 max-w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-leaf-300 bg-white" />
+      <button class="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-sm hover:bg-leaf-50" type="submit">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-5 h-5">
+          <!-- Heroicon: Magnifying Glass -->
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 110-15 7.5 7.5 0 010 15z" />
+        </svg>
+        Buscar
+      </button>
+      {% if request.GET.q %}
+        <a href="?" class="text-sm underline">Limpar</a>
+      {% endif %}
+    </form>
+
+    <a href="{% url 'adicionar_paciente' %}" class="inline-flex items-center gap-2 rounded-xl bg-leaf-600 hover:bg-leaf-700 text-white px-4 py-2 text-sm shadow">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+        <!-- Heroicon Solid: Plus -->
+        <path d="M12 4.5a1 1 0 011 1v5.5h5.5a1 1 0 110 2H13v5.5a1 1 0 11-2 0V13H5.5a1 1 0 110-2H11V5.5a1 1 0 011-1z"/>
+      </svg>
+      Novo Paciente
+    </a>
+  </div>
+
+  {% if pacientes %}
+    <!-- Tabela/Grade responsiva -->
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-sm">
+        <thead class="bg-leaf-50">
+          <tr class="text-left text-slate-600">
+            <th class="px-4 py-3 font-semibold">Paciente</th>
+            <th class="px-4 py-3 font-semibold">Contato</th>
+            <th class="px-4 py-3 font-semibold">CPF</th>
+            <th class="px-4 py-3 font-semibold">Nascimento</th>
+            <th class="px-4 py-3 font-semibold">Sexo</th>
+            <th class="px-4 py-3 font-semibold text-right">Ações</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          {% for p in pacientes %}
+            <tr class="hover:bg-mint/60">
+              <td class="px-4 py-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-9 h-9 rounded-full bg-leaf-100 text-leaf-800 flex items-center justify-center font-semibold">
+                    {{ p.nome|first|upper }}
+                  </div>
+                  <div class="min-w-0">
+                    <div class="font-medium text-slate-800 truncate">{{ p.nome|truncatewords:2 }}</div>
+                    <div class="text-xs text-slate-500">Criado em {{ p.criado_em|date:'d/m/Y' }}</div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-4 py-3">
+                <div class="flex flex-col">
+                  {% if p.telefone %}<span class="text-slate-700">{{ p.telefone }}</span>{% endif %}
+                  {% if p.email %}<span class="text-slate-500 text-xs">{{ p.email }}</span>{% endif %}
+                </div>
+              </td>
+              <td class="px-4 py-3">{{ p.cpf|default:'—' }}</td>
+              <td class="px-4 py-3">{{ p.data_nascimento|date:'d/m/Y' }}</td>
+              <td class="px-4 py-3">
+                {% if p.sexo == 'M' %}
+                  <span class="inline-flex items-center gap-1 rounded-full bg-leaf-100 text-leaf-800 px-2 py-0.5 text-xs">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3.5 h-3.5">
+                      <path d="M13.5 2.25a.75.75 0 000 1.5H17.94l-3.22 3.22a6 6 0 10.97.97l3.31-3.31v4.44a.75.75 0 001.5 0V2.25h-6zM9 20.25a4.5 4.5 0 110-9 4.5 4.5 0 010 9z"/>
+                    </svg>
+                    Masculino
+                  </span>
+                {% else %}
+                  <span class="inline-flex items-center gap-1 rounded-full bg-leaf-100 text-leaf-800 px-2 py-0.5 text-xs">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3.5 h-3.5">
+                      <path d="M12 2.25a5.25 5.25 0 015.25 5.25A5.25 5.25 0 1112 2.25zM12 14.25a.75.75 0 01.75.75V18h1.5a.75.75 0 010 1.5h-1.5v1.5a.75.75 0 01-1.5 0V19.5H9.75a.75.75 0 010-1.5H12v-3a.75.75 0 01.75-.75z"/>
+                    </svg>
+                    Feminino
+                  </span>
+                {% endif %}
+              </td>
+              <td class="px-4 py-3">
+                <div class="flex justify-end gap-2">
+                  <a href="{% url 'detalhes_paciente' p.id %}" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-3 py-1.5 text-xs hover:bg-slate-50">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-4 h-4">
+                      <!-- Eye -->
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12s-3.75 6.75-9.75 6.75S2.25 12 2.25 12z"/>
+                      <circle cx="12" cy="12" r="2.25" stroke-width="1.5"/>
+                    </svg>
+                    Ver
+                  </a>
+                  <a href="{% url 'editar_paciente' p.id %}" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-3 py-1.5 text-xs hover:bg-slate-50">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-4 h-4">
+                      <!-- Pencil -->
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16.862 3.487a1.5 1.5 0 112.121 2.121L7.5 17.192l-3 1 1-3 11.362-11.705z"/>
+                    </svg>
+                    Editar
+                  </a>
+                  <a href="{% url 'excluir_paciente' p.id %}" class="inline-flex items-center gap-1.5 rounded-xl border border-red-200 text-red-700 px-3 py-1.5 text-xs hover:bg-red-50">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-4 h-4">
+                      <!-- Trash -->
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 7.5h12M9.75 7.5V6a1.5 1.5 0 011.5-1.5h1.5A1.5 1.5 0 0114.25 6v1.5m-7.5 0l.75 12A1.5 1.5 0 009 21h6a1.5 1.5 0 001.5-1.5l.75-12"/>
+                    </svg>
+                    Excluir
+                  </a>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Paginação -->
+    {% if is_paginated %}
+      <div class="mt-4 flex items-center justify-between text-sm">
+        <div>
+          Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+        </div>
+        <div class="inline-flex rounded-xl border border-slate-200 overflow-hidden">
+          {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="px-3 py-2 hover:bg-slate-50">Anterior</a>
+          {% else %}
+            <span class="px-3 py-2 text-slate-400">Anterior</span>
+          {% endif %}
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="px-3 py-2 hover:bg-slate-50">Próxima</a>
+          {% else %}
+            <span class="px-3 py-2 text-slate-400">Próxima</span>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+
+  {% else %}
+    <!-- Estado vazio -->
+    <div class="p-8 text-center text-slate-600">
+      <div class="mx-auto w-14 h-14 rounded-2xl bg-leaf-50 flex items-center justify-center mb-3">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-7 h-7 text-leaf-700">
+          <!-- Users -->
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19.127a9 9 0 10-6 0M12 12a3 3 0 100-6 3 3 0 000 6z"/>
+        </svg>
+      </div>
+      <p class="font-medium">Nenhum paciente encontrado</p>
+      <p class="text-sm text-slate-500">Cadastre seu primeiro paciente para começar.</p>
+      <a href="{% url 'adicionar_paciente' %}" class="mt-4 inline-flex items-center gap-2 rounded-xl bg-leaf-600 hover:bg-leaf-700 text-white px-4 py-2 text-sm shadow">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+          <path d="M12 4.5a1 1 0 011 1v5.5h5.5a1 1 0 110 2H13v5.5a1 1 0 11-2 0V13H5.5a1 1 0 110-2H11V5.5a1 1 0 011-1z"/>
+        </svg>
+        Novo Paciente
+      </a>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Opcional: definir seção ativa (caso não esteja setada pela view)
+  // Você também pode passar no contexto: {'section': 'pacientes'}
+</script>
+{% endblock %}

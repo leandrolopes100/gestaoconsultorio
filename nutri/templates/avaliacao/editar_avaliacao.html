@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}Editar Avaliação — Nutri Clínica{% endblock %}
+{% block page_title %}Editar Avaliação{% endblock %}
+{% block page_subtitle %}Atualize os dados da avaliação conforme necessário.{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-lg mt-6">
+
+    <form method="post" class="space-y-6">
+        {% csrf_token %}
+
+        <!-- Dobras -->
+        <h2 class="text-2xl font-bold text-leaf-800 mb-4 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-leaf-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-6h6v6h5v2H4v-2h5z"/>
+            </svg>
+            Dobras
+        </h2>
+        <div>
+            <label for="{{ form.consulta_avaliacao.id_for_label }}" class="block text-sm font-medium text-leaf-800 mb-1">
+                Consulta
+            </label>
+            {{ form.consulta_avaliacao|add_class:"w-full px-4 py-2 border border-leaf-200 rounded-lg focus:ring-2 focus:ring-leaf-300" }}
+            {% if form.consulta_avaliacao.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.consulta_avaliacao.errors }}</p>
+            {% endif %}
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label for="{{ form.peito.id_for_label }}" class="block text-sm font-medium text-leaf-800 mb-1">Peito (mm)</label>
+                {{ form.peito|add_class:"w-full px-4 py-2 border border-leaf-200 rounded-lg focus:ring-2 focus:ring-leaf-300" }}
+                {% if form.peito.errors %}<p class="text-red-600 text-sm mt-1">{{ form.peito.errors }}</p>{% endif %}
+            </div>
+
+            <div>
+                <label for="{{ form.abdomen.id_for_label }}" class="block text-sm font-medium text-leaf-800 mb-1">Abdomen (mm)</label>
+                {{ form.abdomen|add_class:"w-full px-4 py-2 border border-leaf-200 rounded-lg focus:ring-2 focus:ring-leaf-300" }}
+                {% if form.abdomen.errors %}<p class="text-red-600 text-sm mt-1">{{ form.abdomen.errors }}</p>{% endif %}
+            </div>
+
+            <div>
+                <label for="{{ form.iliaca.id_for_label }}" class="block text-sm font-medium text-leaf-800 mb-1">Ilíaca (mm)</label>
+                {{ form.iliaca|add_class:"w-full px-4 py-2 border border-leaf-200 rounded-lg focus:ring-2 focus:ring-leaf-300" }}
+                {% if form.iliaca.errors %}<p class="text-red-600 text-sm mt-1">{{ form.iliaca.errors }}</p>{% endif %}
+            </div>
+
+            <div>
+                <label for="{{ form.axilar_media.id_for_label }}" class="block text-sm font-medium text-leaf-800 mb-1">Axilar Média (mm)</label>
+                {{ form.axilar_media|add_class:"w-full px-4 py-2 border border-leaf-200 rounded-lg focus:ring-2 focus:ring-leaf-300" }}
+                {% if form.axilar_media.errors %}<p class="text-red-600 text-sm mt-1">{{ form.axilar_media.errors }}</p>{% endif %}
+            </div>
+
+            <div>
+                <label for="{{ form.coxas.id_for_label }}" class="block text-sm font-medium text-leaf-800 mb-1">Coxas (mm)</label>
+                {{ form.coxas|add_class:"w-full px-4 py-2 border border-leaf-200 rounded-lg focus:ring-2 focus:ring-leaf-300" }}
+                {% if form.coxas.errors %}<p class="text-red-600 text-sm mt-1">{{ form.coxas.errors }}</p>{% endif %}
+            </div>
+
+            <div>
+                <label for="{{ form.triceps.id_for_label }}" class="block text-sm font-medium text-leaf-800 mb-1">Tríceps (mm)</label>
+                {{ form.triceps|add_class:"w-full px-4 py-2 border border-leaf-200 rounded-lg focus:ring-2 focus:ring-leaf-300" }}
+                {% if form.triceps.errors %}<p class="text-red-600 text-sm mt-1">{{ form.triceps.errors }}</p>{% endif %}
+            </div>
+
+            <div class="md:col-span-2">
+                <label for="{{ form.escapula.id_for_label }}" class="block text-sm font-medium text-leaf-800 mb-1">Escápula (mm)</label>
+                {{ form.escapula|add_class:"w-full px-4 py-2 border border-leaf-200 rounded-lg focus:ring-2 focus:ring-leaf-300" }}
+                {% if form.escapula.errors %}<p class="text-red-600 text-sm mt-1">{{ form.escapula.errors }}</p>{% endif %}
+            </div>
+        </div>
+
+        <!-- Circunferências -->
+        <h2 class="text-2xl font-bold text-leaf-800 mb-4 mt-6 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-leaf-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-6h6v6h5v2H4v-2h5z"/>
+            </svg>
+            Circunferências
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label for="{{ form.circunf_peitoral.id_for_label }}" class="block text-sm font-medium text-leaf-800 mb-1">Peitoral (cm)</label>
+                {{ form.circunf_peitoral|add_class:"w-full px-4 py-2 border border-leaf-200 rounded-lg focus:ring-2 focus:ring-leaf-300" }}
+                {% if form.circunf_peitoral.errors %}<p class="text-red-600 text-sm mt-1">{{ form.circunf_peitoral.errors }}</p>{% endif %}
+            </div>
+
+            <div>
+                <label for="{{ form.circunf_cintura.id_for_label }}" class="block text-sm font-medium text-leaf-800 mb-1">Cintura (cm)</label>
+                {{ form.circunf_cintura|add_class:"w-full px-4 py-2 border border-leaf-200 rounded-lg focus:ring-2 focus:ring-leaf-300" }}
+                {% if form.circunf_cintura.errors %}<p class="text-red-600 text-sm mt-1">{{ form.circunf_cintura.errors }}</p>{% endif %}
+            </div>
+
+            <div>
+                <label for="{{ form.circunf_abdomen.id_for_label }}" class="block text-sm font-medium text-leaf-800 mb-1">Abdomen (cm)</label>
+                {{ form.circunf_abdomen|add_class:"w-full px-4 py-2 border border-leaf-200 rounded-lg focus:ring-2 focus:ring-leaf-300" }}
+                {% if form.circunf_abdomen.errors %}<p class="text-red-600 text-sm mt-1">{{ form.circunf_abdomen.errors }}</p>{% endif %}
+            </div>
+
+            <div>
+                <label for="{{ form.circunf_biceps_dir.id_for_label }}" class="block text-sm font-medium text-leaf-800 mb-1">Bíceps Dir. (cm)</label>
+                {{ form.circunf_biceps_dir|add_class:"w-full px-4 py-2 border border-leaf-200 rounded-lg focus:ring-2 focus:ring-leaf-300" }}
+                {% if form.circunf_biceps_dir.errors %}<p class="text-red-600 text-sm mt-1">{{ form.circunf_biceps_dir.errors }}</p>{% endif %}
+            </div>
+
+            <div>
+                <label for="{{ form.circunf_biceps_esq.id_for_label }}" class="block text-sm font-medium text-leaf-800 mb-1">Bíceps Esq. (cm)</label>
+                {{ form.circunf_biceps_esq|add_class:"w-full px-4 py-2 border border-leaf-200 rounded-lg focus:ring-2 focus:ring-leaf-300" }}
+                {% if form.circunf_biceps_esq.errors %}<p class="text-red-600 text-sm mt-1">{{ form.circunf_biceps_esq.errors }}</p>{% endif %}
+            </div>
+
+            <div>
+                <label for="{{ form.circunf_antebraco_dir.id_for_label }}" class="block text-sm font-medium text-leaf-800 mb-1">Antebraço Dir. (cm)</label>
+                {{ form.circunf_antebraco_dir|add_class:"w-full px-4 py-2 border border-leaf-200 rounded-lg focus:ring-2 focus:ring-leaf-300" }}
+                {% if form.circunf_antebraco_dir.errors %}<p class="text-red-600 text-sm mt-1">{{ form.circunf_antebraco_dir.errors }}</p>{% endif %}
+            </div>
+
+            <div>
+                <label for="{{ form.circunf_antebraco_esq.id_for_label }}" class="block text-sm font-medium text-leaf-800 mb-1">Antebraço Esq. (cm)</label>
+                {{ form.circunf_antebraco_esq|add_class:"w-full px-4 py-2 border border-leaf-200 rounded-lg focus:ring-2 focus:ring-leaf-300" }}
+                {% if form.circunf_antebraco_esq.errors %}<p class="text-red-600 text-sm mt-1">{{ form.circunf_antebraco_esq.errors }}</p>{% endif %}
+            </div>
+
+            <div>
+                <label for="{{ form.circunf_quadril.id_for_label }}" class="block text-sm font-medium text-leaf-800 mb-1">Quadril (cm)</label>
+                {{ form.circunf_quadril|add_class:"w-full px-4 py-2 border border-leaf-200 rounded-lg focus:ring-2 focus:ring-leaf-300" }}
+                {% if form.circunf_quadril.errors %}<p class="text-red-600 text-sm mt-1">{{ form.circunf_quadril.errors }}</p>{% endif %}
+            </div>
+
+            <div>
+                <label for="{{ form.circunf_coxa_dir.id_for_label }}" class="block text-sm font-medium text-leaf-800 mb-1">Coxa Dir. (cm)</label>
+                {{ form.circunf_coxa_dir|add_class:"w-full px-4 py-2 border border-leaf-200 rounded-lg focus:ring-2 focus:ring-leaf-300" }}
+                {% if form.circunf_coxa_dir.errors %}<p class="text-red-600 text-sm mt-1">{{ form.circunf_coxa_dir.errors }}</p>{% endif %}
+            </div>
+
+            <div>
+                <label for="{{ form.circunf_coxa_esq.id_for_label }}" class="block text-sm font-medium text-leaf-800 mb-1">Coxa Esq. (cm)</label>
+                {{ form.circunf_coxa_esq|add_class:"w-full px-4 py-2 border border-leaf-200 rounded-lg focus:ring-2 focus:ring-leaf-300" }}
+                {% if form.circunf_coxa_esq.errors %}<p class="text-red-600 text-sm mt-1">{{ form.circunf_coxa_esq.errors }}</p>{% endif %}
+            </div>
+
+            <div>
+                <label for="{{ form.circunf_pant_dir.id_for_label }}" class="block text-sm font-medium text-leaf-800 mb-1">Panturrilha Dir. (cm)</label>
+                {{ form.circunf_pant_dir|add_class:"w-full px-4 py-2 border border-leaf-200 rounded-lg focus:ring-2 focus:ring-leaf-300" }}
+                {% if form.circunf_pant_dir.errors %}<p class="text-red-600 text-sm mt-1">{{ form.circunf_pant_dir.errors }}</p>{% endif %}
+            </div>
+
+            <div>
+                <label for="{{ form.circunf_pant_esq.id_for_label }}" class="block text-sm font-medium text-leaf-800 mb-1">Panturrilha Esq. (cm)</label>
+                {{ form.circunf_pant_esq|add_class:"w-full px-4 py-2 border border-leaf-200 rounded-lg focus:ring-2 focus:ring-leaf-300" }}
+                {% if form.circunf_pant_esq.errors %}<p class="text-red-600 text-sm mt-1">{{ form.circunf_pant_esq.errors }}</p>{% endif %}
+            </div>
+
+            <div>
+                <label for="{{ form.observacao_avaliacao.id_for_label }}" class="block text-sm font-medium text-leaf-800 mb-1">Observações</label>
+                {{ form.observacao_avaliacao|add_class:"w-full px-4 py-2 border border-leaf-200 rounded-lg focus:ring-2 focus:ring-leaf-300" }}
+                {% if form.observacao_avaliacao.errors %}<p class="text-red-600 text-sm mt-1">{{ form.observacao_avaliacao.errors }}</p>{% endif %}
+            </div>
+        </div>
+
+        <!-- Botões -->
+        <div class="flex justify-end gap-2 mt-6">
+            <a href="{% url 'consultas' %}" class="px-4 py-2 rounded-xl border border-leaf-200 text-leaf-800 hover:bg-leaf-50 transition flex items-center gap-1">
+                Cancelar
+            </a>
+            <button type="submit" class="px-6 py-2 rounded-xl bg-leaf-600 hover:bg-leaf-700 text-white shadow-md transition flex items-center gap-1">
+                Atualizar
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

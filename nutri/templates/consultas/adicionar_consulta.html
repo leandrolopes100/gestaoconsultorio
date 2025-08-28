@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}Adicionar Consulta — Nutri Clínica{% endblock %}
+
+{% block page_title %}Adicionar Consulta{% endblock %}
+{% block page_subtitle %}Preencha os dados da consulta para cadastrar.{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-lg mt-6">
+    <h1 class="text-2xl font-bold text-leaf-800 mb-4 flex items-center gap-2">
+        <!-- Ícone Calendário -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-leaf-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M4 11h16M4 19h16M4 11v8m16-8v8" />
+        </svg>
+        Adicionar Consulta
+    </h1>
+
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Paciente -->
+            <div>
+                <label for="{{ form.paciente.id_for_label }}" class="block text-sm font-medium text-leaf-800 mb-1">Paciente</label>
+                {{ form.paciente|add_class:"w-full px-4 py-2 border border-leaf-200 rounded-lg focus:ring-2 focus:ring-leaf-300" }}
+                {% if form.paciente.errors %}<p class="text-red-600 text-sm mt-1">{{ form.paciente.errors }}</p>{% endif %}
+            </div>
+
+            <!-- Data e Hora -->
+            <div>
+                <label for="{{ form.data_consulta.id_for_label }}" class="block text-sm font-medium text-leaf-800 mb-1">Data e Hora</label>
+                {{ form.data_consulta|add_class:"w-full px-4 py-2 border border-leaf-200 rounded-lg focus:ring-2 focus:ring-leaf-300" }}
+                {% if form.data_consulta.errors %}<p class="text-red-600 text-sm mt-1">{{ form.data_consulta.errors }}</p>{% endif %}
+            </div>
+
+            <!-- Peso -->
+            <div>
+                <label for="{{ form.peso.id_for_label }}" class="block text-sm font-medium text-leaf-800 mb-1">Peso (kg)</label>
+                {{ form.peso|add_class:"w-full px-4 py-2 border border-leaf-200 rounded-lg focus:ring-2 focus:ring-leaf-300" }}
+                {% if form.peso.errors %}<p class="text-red-600 text-sm mt-1">{{ form.peso.errors }}</p>{% endif %}
+            </div>
+
+            <!-- Altura -->
+            <div>
+                <label for="{{ form.altura.id_for_label }}" class="block text-sm font-medium text-leaf-800 mb-1">Altura (m)</label>
+                {{ form.altura|add_class:"w-full px-4 py-2 border border-leaf-200 rounded-lg focus:ring-2 focus:ring-leaf-300" }}
+                {% if form.altura.errors %}<p class="text-red-600 text-sm mt-1">{{ form.altura.errors }}</p>{% endif %}
+            </div>
+
+            <!-- Observações -->
+            <div class="md:col-span-2">
+                <label for="{{ form.observacoes.id_for_label }}" class="block text-sm font-medium text-leaf-800 mb-1">Observações</label>
+                {{ form.observacoes|add_class:"w-full px-4 py-2 border border-leaf-200 rounded-lg focus:ring-2 focus:ring-leaf-300" }}
+                {% if form.observacoes.errors %}<p class="text-red-600 text-sm mt-1">{{ form.observacoes.errors }}</p>{% endif %}
+            </div>
+
+            <!-- Valor da Consulta -->
+            <div>
+                <label for="{{ form.valor_consulta.id_for_label }}" class="block text-sm font-medium text-leaf-800 mb-1">Valor da Consulta (R$)</label>
+                {{ form.valor_consulta|add_class:"w-full px-4 py-2 border border-leaf-200 rounded-lg focus:ring-2 focus:ring-leaf-300" }}
+                {% if form.valor_consulta.errors %}<p class="text-red-600 text-sm mt-1">{{ form.valor_consulta.errors }}</p>{% endif %}
+            </div>
+        </div>
+
+        <!-- Botões -->
+        <div class="flex justify-end gap-2 mt-6">
+            <a href="{% url 'consultas' %}" class="px-4 py-2 rounded-xl border border-leaf-200 text-leaf-800 hover:bg-leaf-50 transition flex items-center gap-1">
+                <!-- Ícone Cancelar -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+                Cancelar
+            </a>
+            <button type="submit" class="px-6 py-2 rounded-xl bg-leaf-600 hover:bg-leaf-700 text-white shadow-md transition flex items-center gap-1">
+                <!-- Ícone Salvar -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                Salvar
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

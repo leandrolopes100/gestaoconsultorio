@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Consultas — Nutri Clínica{% endblock %}
+
+{% block page_title %}Consultas{% endblock %}
+{% block page_subtitle %}Gerencie suas consultas, veja informações principais e acesse ações rápidas.{% endblock %}
+
+{% block content %}
+<!-- Barra de ações / busca -->
+<div class="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between mb-4">
+    <form method="get" class="flex items-center gap-2">
+        <label for="q" class="sr-only">Buscar consulta</label>
+        <input id="q" name="q" value="{{ request.GET.q|default:'' }}" type="text" placeholder="Buscar por paciente ou data..." 
+               class="w-72 max-w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-leaf-300 bg-white" />
+        <button class="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-sm hover:bg-leaf-50" type="submit">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 110-15 7.5 7.5 0 010 15z" />
+            </svg>
+            Buscar
+        </button>
+        {% if request.GET.q %}
+            <a href="?" class="text-sm underline">Limpar</a>
+        {% endif %}
+    </form>
+
+    <a href="{% url 'adicionar_consulta' %}" class="inline-flex items-center gap-2 rounded-xl bg-leaf-600 hover:bg-leaf-700 text-white px-4 py-2 text-sm shadow">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+            <path d="M12 4.5a1 1 0 011 1v5.5h5.5a1 1 0 110 2H13v5.5a1 1 0 11-2 0V13H5.5a1 1 0 110-2H11V5.5a1 1 0 011-1z"/>
+        </svg>
+        Nova Consulta
+    </a>
+</div>
+
+{% if consultas %}
+<div class="overflow-x-auto bg-white shadow rounded-lg">
+    <table class="min-w-full text-sm">
+        <thead class="bg-leaf-50">
+            <tr class="text-left text-slate-600">
+                <th class="px-4 py-3 font-semibold">Paciente</th>
+                <th class="px-4 py-3 font-semibold">Data</th>
+                <th class="px-4 py-3 font-semibold">Hora</th>
+                <th class="px-4 py-3 font-semibold">Observações</th>
+                <th class="px-4 py-3 font-semibold">IMC</th>
+                <th class="px-4 py-3 font-semibold">TMB</th>
+                <th class="px-4 py-3 font-semibold">Status</th>
+                <th class="px-4 py-3 font-semibold text-center">Ações</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+            {% for c in consultas %}
+            <tr class="hover:bg-mint/60">
+               <td class="px-4 py-3 flex items-center gap-2 ">
+                    <!-- Ícone de paciente simples com fundo branco -->
+                    <div class="w-6 h-6 rounded-full bg-white border border-slate-300 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
+                            stroke="currentColor" class="w-4 h-4 text-leaf-600">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M12 14c3.866 0 7 1.79 7 4v2H5v-2c0-2.21 3.134-4 7-4zm0-2a4 4 0 100-8 4 4 0 000 8z" />
+                        </svg>
+                    </div>
+                    {{ c.paciente.nome|truncatewords:2 }}
+                </td>
+                <td class="px-4 py-3">{{ c.data_consulta|date:'d/m/Y' }}</td>
+                <td class="px-4 py-3">{{ c.data_consulta|time:'H:i' }}</td>
+                <td class="px-4 py-3">{{ c.observacoes|truncatewords:3 }}</td>
+                <td class="px-4 py-3">{{ c.imc }}</td>
+                <td class="px-4 py-3">{{ c.tmb }}</td>
+                <td class="px-4 py-3 ">
+                    {% if c.consulta_feita %}
+                        <span class="inline-flex items-center gap-1.5 text-green-600 font-medium">
+                            <!-- Ícone de check -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Consulta Feita
+                        </span>
+                    {% else %}
+                        <span class="inline-flex items-center gap-1.5 text-yellow-600 font-medium">
+                            <!-- Ícone de relógio/aguardando -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            Agendada
+                        </span>
+                    {% endif %}
+                </td>
+                <td class="px-4 py-3 flex justify-end gap-2">
+                    <a href="{% url 'detalhes_consulta' c.id %}" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-3 py-1.5 text-xs hover:bg-slate-50 text-emerald-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12s-3.75 6.75-9.75 6.75S2.25 12 2.25 12z"/>
+                            <circle cx="12" cy="12" r="2.25" stroke-width="1.5"/>
+                        </svg>
+                    
+                    </a>
+                    {% if not c.consulta_feita %}
+                        <a href="{% url 'editar_consulta' c.id %}" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-3 py-1.5 text-xs hover:bg-slate-50 text-blue-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16.862 3.487a1.5 1.5 0 112.121 2.121L7.5 17.192l-3 1 1-3 11.362-11.705z"/>
+                            </svg>
+                            
+                        </a>
+                    {% endif %}
+                
+                    <a href="{% url 'excluir_consulta' c.id %}" class="inline-flex items-center gap-1.5 rounded-xl border border-red-200 px-3 py-1.5 text-xs hover:bg-red-50 text-red-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 7.5h12M9.75 7.5V6a1.5 1.5 0 011.5-1.5h1.5A1.5 1.5 0 0114.25 6v1.5m-7.5 0l.75 12A1.5 1.5 0 009 21h6a1.5 1.5 0 001.5-1.5l.75-12"/>
+                        </svg>
+                       
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Paginação -->
+{% if is_paginated %}
+<div class="mt-4 flex items-center justify-between text-sm">
+    <div>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</div>
+    <div class="inline-flex rounded-xl border border-slate-200 overflow-hidden">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="px-3 py-2 hover:bg-slate-50">Anterior</a>
+        {% else %}
+            <span class="px-3 py-2 text-slate-400">Anterior</span>
+        {% endif %}
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="px-3 py-2 hover:bg-slate-50">Próxima</a>
+        {% else %}
+            <span class="px-3 py-2 text-slate-400">Próxima</span>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+{% else %}
+<!-- Estado vazio -->
+<div class="p-8 text-center text-slate-600">
+    <div class="mx-auto w-14 h-14 rounded-2xl bg-leaf-50 flex items-center justify-center mb-3">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-7 h-7 text-leaf-700">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19.127a9 9 0 10-6 0M12 12a3 3 0 100-6 3 3 0 000 6z"/>
+        </svg>
+    </div>
+    <p class="font-medium">Nenhuma consulta encontrada</p>
+    <p class="text-sm text-slate-500">Cadastre sua primeira consulta para começar.</p>
+    <a href="{% url 'adicionar_consulta' %}" class="mt-4 inline-flex items-center gap-2 rounded-xl bg-leaf-600 hover:bg-leaf-700 text-white px-4 py-2 text-sm shadow">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+            <path d="M12 4.5a1 1 0 011 1v5.5h5.5a1 1 0 110 2H13v5.5a1 1 0 11-2 0V13H5.5a1 1 0 110-2H11V5.5a1 1 0 011-1z"/>
+        </svg>
+        Nova Consulta
+    </a>
+</div>
+{% endif %}
+{% endblock %}

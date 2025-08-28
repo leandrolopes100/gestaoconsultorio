@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Detalhes do Paciente — Nutri Clínica{% endblock %}
+{% block page_title %}Detalhes do Paciente{% endblock %}
+{% block page_subtitle %}Veja as informações completas do paciente.{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-6">
+
+    <!-- Card com os dados do paciente -->
+    <div class="bg-white shadow rounded-2xl p-6 space-y-6 border border-gray-200">
+        <h2 class="text-xl font-bold text-emerald-700 flex items-center gap-2 border-b pb-2">
+            <!-- Ícone -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A4 4 0 018 16h8a4 4 0 012.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            Informações Pessoais
+        </h2>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-700 pl-9">
+            <p><span class="font-medium text-gray-900">Nome:</span> {{ paciente.nome }}</p>
+            <p><span class="font-medium text-gray-900">Idade:</span> {{ paciente.idade }}</p>
+            <p><span class="font-medium text-gray-900">Data de Nascimento:</span> {{ paciente.data_nascimento|date:"d/m/Y" }}</p>
+            <p><span class="font-medium text-gray-900">Sexo:</span> {{ paciente.get_sexo_display }}</p>
+            <p><span class="font-medium text-gray-900">Telefone:</span> {{ paciente.telefone|default:"—" }}</p>
+            <p><span class="font-medium text-gray-900">Email:</span> {{ paciente.email|default:"—" }}</p>
+            <p class="sm:col-span-2"><span class="font-medium text-gray-900">Endereço:</span> {{ paciente.endereco|default:"—" }}</p>
+            <p><span class="font-medium text-gray-900">Criado em:</span> {{ paciente.criado_em|default:"—" }}</p>
+        </div>
+    </div>
+
+    <!-- Card com informações adicionais -->
+    <div class="bg-white shadow rounded-2xl p-6 space-y-4 border border-gray-200">
+        <h2 class="text-xl font-bold text-emerald-700 flex items-center gap-2 border-b pb-2">
+            <!-- Ícone notas -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m-6-8h6m2 12H7a2 2 0 01-2-2V6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v10a2 2 0 01-2 2z"/>
+            </svg>
+            Observações
+        </h2>
+        <p class="text-gray-700 whitespace-pre-line pl-8">
+            {{ paciente.informacoes_adicionais|default:"Nenhuma observação registrada." }}
+        </p>
+    </div>
+
+    <!-- Ações -->
+    <div class="flex justify-between mt-6">
+        <a href="{% url 'pacientes' %}" 
+           class="px-5 py-2.5 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-xl shadow-sm flex items-center gap-2 transition">
+            <!-- Ícone voltar -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+            Voltar
+        </a>
+        <div class="flex gap-3">
+            <a href="{% url 'editar_paciente' paciente.id %}" 
+               class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow flex items-center gap-2 transition">
+                <!-- Ícone editar -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16.862 4.487l1.651-1.652a1.875 1.875 0 112.652 2.652L8.84 17.813a4.5 4.5 0 01-1.897 1.13l-3.12.937.938-3.12a4.5 4.5 0 011.13-1.897l12.97-12.97z"/>
+                </svg>
+                Editar
+            </a>
+            <a href="{% url 'excluir_paciente' paciente.id %}" 
+               class="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl shadow flex items-center gap-2 transition">
+                <!-- Ícone excluir -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+                Excluir
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
